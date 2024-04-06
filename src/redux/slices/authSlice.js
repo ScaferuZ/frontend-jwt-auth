@@ -17,5 +17,20 @@ export const authSlice = createSlice({
         state.isLoggedIn = true;
       }
     },
+    login: (state, action) => {
+      // action argument helps us to pass data in our action functions
+      localStorage.setItem("user", action.payload);
+      state.isLoggedIn = true;
+    },
+    logout: (state) => {
+      localStorage.clear();
+      state.isLoggedIn = false;
+    },
   },
 });
+
+// named exports to be used in components
+export const { checkIsUserLoggedIn, login, logout } = authSlice.actions;
+
+// default export will be used to import the reducer in the store
+export default authSlice.reducer;
