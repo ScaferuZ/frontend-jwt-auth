@@ -1,6 +1,6 @@
 export const authAPI = {
   api_login: async (credentials) => {
-    return fetch("https://localhost:3000/api/user/login", {
+    return fetch("http://localhost:4000/api/user/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -12,12 +12,12 @@ export const authAPI = {
         return json;
       })
       .catch((error) => {
-        return { error };
+        return { error: error.message };
       });
   },
 
   api_signup: async (credentials) => {
-    return fetch("https://localhost:3000/api/user/signup", {
+    return fetch("http://localhost:4000/api/user/signup", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -29,7 +29,7 @@ export const authAPI = {
         return json;
       })
       .catch((error) => {
-        return { error };
+        return { error: error.message };
       });
   },
 };
