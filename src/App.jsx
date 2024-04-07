@@ -15,12 +15,15 @@ import AuthHeaderLayout from "./layout/authHeaderLayout";
 import Signup from "./pages/Signup";
 import MainHeaderLayout from "./layout/MainHeaderLayout";
 import TravelBlogPage from "./pages/TravelBlog";
+import { useEffect } from "react";
 
 function App() {
   // initialitze dispatcher hook
   const dispatcher = useDispatch();
   // call the action function to check and update the isLoggedIn state
-  dispatcher(checkIsUserLoggedIn());
+  useEffect(() => {
+    dispatcher(checkIsUserLoggedIn());
+  }, [dispatcher]);
   // fetch the isLoggedIn state variable using selector hook
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
