@@ -15,6 +15,21 @@ export default function Signup() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (
+      password.length < 8 ||
+      !/[A-Z]/.test(password) ||
+      !/[a-z]/.test(password) ||
+      !/\d/.test(password)
+    ) {
+      setError(
+        "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one number.",
+      );
+      setPassword("");
+      setRetypePassword("");
+      return;
+    }
+
     if (password !== retypePassword) {
       setError("Passwords do not match");
       return;
