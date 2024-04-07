@@ -1,14 +1,39 @@
 import React from "react";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { authAPI } from "../services/api";
+import { login } from "../redux/slices/authSlice";
 
 export default function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [retypePassword, setRetypePassword] = useState("");
+  const [error, setError] = useState(null);
 
-  const handleSubmit = (e) => {
+  const dispatcher = useDispatch();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    if (password !== retypePassword) {
+      setError("Passwords do not match");
+      return;
+    }
+
+    const response = await authAPI.api_signup({ email, password });
+
+    if (!response) {
+      setError("Some error occured. Try again later");
+      return;
+    }
+
+    if (response.error) {
+      setError(response.error);
+      return;
+    }
+
+    const userJSON = JSON.stringify(response);
+    dispatcher(login(userJSON));
   };
 
   return (
@@ -17,7 +42,7 @@ export default function Signup() {
         <h2>Create Account</h2>
         <form method="POST">
           <div className="form-group">
-            <label for="email">Email:"</label>
+            <label htmlFor="email">Email:</label>
             <input
               type="email"
               name="email"
@@ -27,7 +52,7 @@ export default function Signup() {
             />
           </div>
           <div className="form-group">
-            <label for="password">Password:"</label>
+            <label htmlFor="password">Password:</label>
             <input
               type="password"
               name="password"
@@ -37,7 +62,7 @@ export default function Signup() {
             />
           </div>
           <div className="form-group">
-            <label for="confirmPassword">Confirm Password:"</label>
+            <label htmlFor="confirmPassword">Confirm Password:</label>
             <input
               type="password"
               name="confirmPassword"
@@ -46,12 +71,13 @@ export default function Signup() {
               required
             />
           </div>
-          <button type="submit" className="submit-btn">
+          <button type="submit" className="submit-btn" onClick={handleSubmit}>
             Submit
           </button>
           <p>
             Already has an account? <Link to="/">Login</Link>
           </p>
+          {error && <div className="error-message">{error}</div>}
         </form>
       </div>
     </>
